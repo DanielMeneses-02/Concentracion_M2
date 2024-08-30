@@ -23,7 +23,7 @@ obesidad = np.array(df['Obesidad']) # 'obesidad' indica si un individuo es obeso
 x_train, x_test, y_train, y_test, obesidad_train, obesidad_test = train_test_split(x, y, obesidad, test_size=0.3, random_state=42) # Dividir el dataset en entrenamiento (70%) y prueba (30%)
 
 m = 0  # Pendiente inicial de la línea de regresión
-b = 0  # Intercepto inicial de la línea de regresión
+b = 0  # Intercepción inicial de la línea de regresión
 alpha = 0.001  # Tasa de aprendizaje para el algoritmo de descenso de gradiente
 epochs = 100000  # Número máximo de iteraciones
 tolerance = 1e-6  # Tolerancia para la convergencia (criterio de parada)
@@ -63,7 +63,7 @@ clasificacion_obesidad_train = np.where(y_train > predicciones_train, 'Si', 'No'
 cm_train = confusion_matrix(obesidad_train, clasificacion_obesidad_train, labels=['Si', 'No'])
 disp_train = ConfusionMatrixDisplay(confusion_matrix=cm_train, display_labels=['Obesidad', 'No Obesidad'])
 
-# Mostrar la matriz de confusión visualmente para los datos de entrenamiento
+# Mostrar la matriz de confusión para los datos de entrenamiento
 disp_train.plot(cmap=plt.cm.Blues)
 plt.title("Matriz de Confusión - Entrenamiento")
 plt.show()
@@ -81,7 +81,7 @@ print(f"F1 Score: {f1:.2f} \n")
 # Graficar los puntos de datos de entrenamiento junto con la línea de regresión
 plt.figure(figsize=(10, 6))
 
-# Puntos de datos clasificados originalmente como obesos (azul) y no obesos (naranja)
+# Puntos de datos clasificados originalmente como obesos y no obesos
 plt.scatter(x_train[obesidad_train == 'Si'], y_train[obesidad_train == 'Si'], color='blue', label='Obesos (Original)')
 plt.scatter(x_train[obesidad_train == 'No'], y_train[obesidad_train == 'No'], color='orange', label='No Obesos (Original)')
 
@@ -109,7 +109,7 @@ clasificacion_obesidad_test = np.where(y_test > predicciones_test, 'Si', 'No')
 cm_test = confusion_matrix(obesidad_test, clasificacion_obesidad_test, labels=['Si', 'No'])
 disp_test = ConfusionMatrixDisplay(confusion_matrix=cm_test, display_labels=['Obesidad', 'No Obesidad'])
 
-# Mostrar la matriz de confusión visualmente para los datos de prueba
+# Mostrar la matriz de confusión para los datos de prueba
 disp_test.plot(cmap=plt.cm.Blues)
 plt.title("Matriz de Confusión - Prueba")
 plt.show()
@@ -127,7 +127,7 @@ print(f"F1 Score: {f1:.2f}\n")
 # Graficar los puntos de datos junto con la línea de regresión
 plt.figure(figsize=(10, 6))
 
-# Puntos de datos clasificados originalmente como obesos (azul) y no obesos (naranja)
+# Puntos de datos clasificados originalmente como obesos y no obesos
 plt.scatter(x_test[obesidad_test == 'Si'], y_test[obesidad_test == 'Si'], color='blue', label='Obesos (Original)')
 plt.scatter(x_test[obesidad_test == 'No'], y_test[obesidad_test == 'No'], color='orange', label='No Obesos (Original)')
 
