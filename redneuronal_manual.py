@@ -57,31 +57,31 @@ def forward_propagation(X, parameters):
     w2 = parameters['w2']
     b2 = parameters['b2']
 
-    C1 = np.dot(w1, X) + b1 # Cálculo de la capa oculta
-    A1 = sigmoid(C1) # Activación
+    C1 = np.dot(w1, X) + b1 # Calcular el valor de entrada a la capa oculta
+    A1 = sigmoid(C1) # Activación sigmoidal
 
-    C2 = np.dot(w2, A1) + b2 # Cálculo de la capa de salida
-    A2 = sigmoid(C2) # Activación
+    C2 = np.dot(w2, A1) + b2 # Calcular el valor de entrada a la capa oculta
+    A2 = sigmoid(C2) # Activación sigmoidal
 
-    cache = {"C1": C1, "A1": A1, "C2": C2, "A2": A2} # Guardar valores intermedios en 'cache'
+    cache = {"C1": C1, "A1": A1, "C2": C2, "A2": A2} # Guardar valores intermedios en 'cache' para su uso en Backpropagation
     return A2, cache
 
 # ---------------BACKPROPAGATION---------------
 def backward_propagation(parameters, cache, X, Y):
     m = X.shape[1]  # Número de ejemplos de entrenamiento
 
-    w2 = parameters['w2'] # Extraer parámetros y activaciones
-    A1 = cache['A1']
+    w2 = parameters['w2'] # Extraer parámetros intermedios
+    A1 = cache['A1'] # Extraer activaciones intermedias
     A2 = cache['A2']
 
-    dC2 = A2 - Y # Cálculo del gradiente para la capa de salida
-    dw2 = (1 / m) * np.dot(dC2, A1.T)
-    db2 = (1 / m) * np.sum(dC2, axis=1, keepdims=True)
+    dC2 = A2 - Y # Calcular el error de la capa de salida
+    dw2 = (1 / m) * np.dot(dC2, A1.T) # Calcular el gradiente de los pesos de la capa de salida
+    db2 = (1 / m) * np.sum(dC2, axis=1, keepdims=True) # Calcular el gradiente de los sesgos de la capa de salida
 
-    dA1 = np.dot(w2.T, dC2) # Cálculo del gradiente para la capa oculta
-    dC1 = dA1 * sigmoid_derivative(A1)
-    dw1 = (1 / m) * np.dot(dC1, X.T)
-    db1 = (1 / m) * np.sum(dC1, axis=1, keepdims=True)
+    dA1 = np.dot(w2.T, dC2) # Propagar el error hacia atrás desde la capa de salida a la capa oculta
+    dC1 = dA1 * sigmoid_derivative(A1) # Calcular el gradiente de la capa oculta mediante la derivada de la función sigmoide
+    dw1 = (1 / m) * np.dot(dC1, X.T) # Calcular el gradiente de los pesos de la capa oculta
+    db1 = (1 / m) * np.sum(dC1, axis=1, keepdims=True) # Calcular el gradiente de los sesgos de la capa oculta
 
     grads = {"dw1": dw1, "db1": db1, "dw2": dw2, "db2": db2} # Guardar gradientes en 'grads'
     return grads
@@ -98,22 +98,22 @@ def update_parameters(parameters, grads, learning_rate):
 
 # ---------------ENTRENAMIENTO---------------
 def train(X, Y, n_h, num_iterations=10000, learning_rate=0.01):
-    n_x = X.shape[0]  # Número de características
+    n_x = X.shape[0]  # Número de características de entrada
     n_y = Y.shape[0]  # Número de clases (salida)
 
     parameters = initialize_parameters(n_x, n_h, n_y) # Inicializar los parámetros
 
-    for i in range(num_iterations):
-        A2, cache = forward_propagation(X, parameters) # Propagación hacia adelante
-        grads = backward_propagation(parameters, cache, X, Y) # Retropropagación
-        parameters = update_parameters(parameters, grads, learning_rate) # Actualización de parámetros
+    for i in range(num_iterations): # Iterar para entrenar la red
+        A2, cache = forward_propagation(X, parameters) # Propagar hacia adelante para obtener la salida 'A2'
+        grads = backward_propagation(parameters, cache, X, Y) # Realizar backpropagation para calcular los gradientes
+        parameters = update_parameters(parameters, grads, learning_rate) # Actualizar los parámetros
 
         if i % 1000 == 0: # Imprimir el costo cada 1000 iteraciones
-            cost = np.mean((Y - A2) ** 2)
+            cost = np.mean((Y - A2) ** 2) # Calcular el error cuadrático medio
             print(f"Costo en iteración {i}: {cost}")
 
     # Imprimir el costo final y los pesos finales
-    final_cost = np.mean((Y - A2) ** 2)
+    final_cost = np.mean((Y - A2) ** 2) # Calcular el error cuadrático medio final
     print("\n------COSTO FINAL------")
     print(f"- Costo final después de {num_iterations} iteraciones: {final_cost}\n")
 
